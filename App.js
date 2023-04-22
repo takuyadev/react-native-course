@@ -1,39 +1,20 @@
 import React, { useState } from "react";
-import { View, Button, Text, InputAccessoryView } from "react-native";
+import { View, Button, Text } from "react-native";
 import { StyleSheet } from "react-native";
-import { Linking } from "react-native";
-import { TextInput } from "react-native-web";
 
 function App() {
-   const [name, setName] = useState("Mash");
-   const [session, setSession] = useState({ number: 6, title: "state" });
-   const [current, setCurrent] = useState(true);
-   const [count, setCount] = useState(0);
+   const [name, setName] = useState("Test");
 
    const handleOnClick = () => {
-      setName("New State");
-      setSession({ number: 7, title: "Style" });
-      setCurrent(false);
+      setName("Style Test");
    };
 
    return (
       <View style={styles.body}>
-         {/* <Text style={styles.text}>{count * 5}</Text>
-         <Button
-            title="Add"
-            onPress={() => {
-               setCount((prev) => prev + 1);
-            }}
-         ></Button>
-         <Text style={styles.text}>You clicked {count}times.</Text> */}
-
-
-         <Text style={styles.text}>My name is {name}</Text>
-         <Text style={styles.text}>
-            This is session number {session.number} and about {session.title}
-         </Text>
-         <Text style={styles.text}>{current ? "current session" : "next session"}</Text>
-         <Button title="Update state" onPress={handleOnClick} />
+         <Text style={styles.text}>{name}</Text>
+         <View style={styles.button}>
+            <Button style={styles.button} title="Update state" onPress={handleOnClick} />
+         </View>
       </View>
    );
 }
@@ -44,9 +25,15 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       backgroundColor: "#000000",
       alignItems: "center",
+      borderWidth: 10,
+      borderColor: "white",
    },
    text: {
       color: "#FFFFFF",
+      textTransform: "uppercase",
+   },
+   button: {
+      width: 200,
    },
 });
 
