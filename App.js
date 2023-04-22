@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, SectionList, ScrollView, RefreshControl, FlatList } from "react-native";
+import {
+   View,
+   Text,
+   SectionList,
+   ScrollView,
+   RefreshControl,
+   FlatList,
+   TextInput,
+} from "react-native";
 import { StyleSheet } from "react-native";
 
 function App() {
    const [refreshing, setRefreshing] = useState(false);
+   const [name, setName] = useState("");
    const [count, setCount] = useState(2);
    const [list, setList] = useState([
       {
@@ -38,21 +47,33 @@ function App() {
    };
 
    return (
-      <SectionList
-         sections={list}
-         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-         keyExtractor={(_item, index) => index.toString()}
-         renderItem={({ item }) => {
-            return <Text style={styles.text}>{item}</Text>;
-         }}
-         renderSectionHeader={({ section }) => {
-            return (
-               <View style={styles.item}>
-                  <Text style={styles.text}>{section.title}</Text>
-               </View>
-            );
-         }}
-      />
+      <View style={styles.body}>
+         <Text style={styles.text}>Please write your name: {name}</Text>
+         <TextInput
+            secureTextEntry
+            placeholder={"HEYYY"}
+            onChangeText={(value) => {
+               setName(value);
+            }}
+            style={styles.textInput}
+            maxLength={2}
+         />
+      </View>
+      // <SectionList
+      //    sections={list}
+      //    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      //    keyExtractor={(_item, index) => index.toString()}
+      //    renderItem={({ item }) => {
+      //       return <Text style={styles.text}>{item}</Text>;
+      //    }}
+      //    renderSectionHeader={({ section }) => {
+      //       return (
+      //          <View style={styles.item}>
+      //             <Text style={styles.text}>{section.title}</Text>
+      //          </View>
+      //       );
+      //    }}
+      // />
 
       // <FlatList
       //    data={items}
@@ -89,27 +110,20 @@ function App() {
 }
 
 const styles = StyleSheet.create({
-   safeView: {
-      marginVertical: "10",
-   },
    body: {
       flex: 1,
       margin: 20,
+      alignItems: "center",
    },
    text: {
-      fontSize: 50,
-      textAlign: "center",
+      marginBottom: 100,
    },
-   item: {
-      fontSize: 20,
+   textInput: {
+      width: 200,
+      borderWidth: 1,
+      borderColor: "red",
       padding: 10,
-      backgroundColor: "#00FF00",
-      marginVertical: 10,
-      color: "#000000",
-      borderRadius: 10,
-   },
-   list: {
-      gap: 8,
+      textAlign: "center",
    },
 });
 
