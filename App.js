@@ -1,111 +1,70 @@
 import React, { useState } from "react";
-import { View, Button, Text } from "react-native";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
 import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-web";
 
 function App() {
-   const [name, setName] = useState("Test");
+   const [refreshing, setRefreshing] = useState(false);
+   const [items, setItems] = useState([
+      { key: 1, item: "Item 1" },
+      { key: 2, item: "Item 2" },
+      { key: 3, item: "Item 3" },
+      { key: 4, item: "Item 4" },
+      { key: 5, item: "Item 5" },
+      { key: 6, item: "Item 6" },
+      { key: 7, item: "Item 7" },
+      { key: 8, item: "Item 8" },
+   ]);
 
-   const handleOnClick = () => {
-      setName("Style Test");
+   const onRefresh = () => {
+      setRefreshing(true);
+      setItems([...items, { key: 69, item: "item" }]);
+      setRefreshing(false);
    };
 
    return (
       <View style={styles.body}>
-         <View style={styles.view4}>
-            <View style={styles.view1}>
-               <Text>1</Text>
-            </View>
-            <View style={styles.view2}>
-               <Text>2</Text>
-            </View>
-            <View style={styles.view3}>
-               <Text>3</Text>
-            </View>
-         </View>
-         <View style={styles.view5}>
-            <Text>4</Text>
-         </View>
-         <View style={styles.view6}>
-            <Text>5</Text>
-         </View>
+         <View styles={styles.safeView} />
 
-         <View style={styles.view7}>
-            <View style={styles.view1}>
-               <Text>6</Text>
-            </View>
-            <View style={styles.view8}>
-               <Text>1</Text>
-            </View>
-         </View>
+         <ScrollView
+            styles={styles.list}
+            refreshControl={
+               <RefreshControl onRefresh={onRefresh} refreshing={refreshing} colors={["#ff00ff"]} />
+            }
+         >
+            {items.map((item) => {
+               return (
+                  <View key={item.key} style={styles.item}>
+                     <Text style={styles.text}>{item.item}</Text>
+                  </View>
+               );
+            })}
+         </ScrollView>
       </View>
    );
 }
 
 const styles = StyleSheet.create({
+   safeView: {
+      marginVertical: "10",
+   },
    body: {
       flex: 1,
-      alignItems: "stretch",
-      justifyContent: "center",
-      backgroundColor: "#000000",
-      borderColor: "white",
-   },
-   view4: {
-      flex: 1,
-      flexDirection: "row",
-      backgroundColor: "#FFFF00",
-      alignItems: "stretch",
-      justifyContent: "center",
-   },
-   view1: {
-      flex: 1,
-      backgroundColor: "#FFFFFF",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   view2: {
-      flex: 1,
-      backgroundColor: "#00FFFF",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   view3: {
-      flex: 3,
-      backgroundColor: "#EEEEEE",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   view5: {
-      flex: 4,
-      backgroundColor: "#FF0000",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   view6: {
-      flex: 4,
-      backgroundColor: "#00FF00",
-      alignItems: "center",
-      justifyContent: "center",
+      margin: 20,
    },
    text: {
-      color: "#FFFFFF",
-      textTransform: "uppercase",
+      fontSize: 50,
+      textAlign: "center",
    },
-   view7: {
-      flex: 8,
-      flexDirection: "row",
-      backgroundColor: "#FFFF00",
-      alignItems: "stretch",
-      justifyContent: "center",
+   item: {
+      fontSize: 20,
+      padding: 10,
+      backgroundColor: "#00FF00",
+      marginVertical: 10,
+      color: "#000000",
+      borderRadius: 10,
    },
-   view8: {
-      flex: 1,
-      backgroundColor: "#000000",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   button: {
-      width: 200,
+   list: {
+      gap: 8,
    },
 });
 
