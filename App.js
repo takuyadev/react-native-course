@@ -1,52 +1,45 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { ScreenA } from "./src/screens/ScreenA";
+import { ScreenB } from "./src/screens/ScreenB";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { StyleSheet } from "react-native";
-import { PrimaryButton } from "./CustomButton";
+import { AntDesign } from "@expo/vector-icons";
 
-const Stack = createStackNavigator();
-
-const ScreenA = ({ navigation }) => {
-   const onPressHandler = () => {
-      navigation.replace("Screen_B");
-   };
-
-   return (
-      <View style={styles.body}>
-         <Text style={styles.text}>Screen A</Text>
-         <PrimaryButton title="Screen B" onPress={onPressHandler} />
-      </View>
-   );
-};
-
-const ScreenB = ({ navigation }) => {
-   const onPressHandler = () => {
-      navigation.replace("Screen_A");
-   };
-   return (
-      <View style={styles.body}>
-         <Text style={styles.text}>Screen B</Text>
-         <PrimaryButton onPress={onPressHandler} title="Go back to Screen A" />
-      </View>
-   );
-};
+const Tab = createMaterialBottomTabNavigator();
 
 function App() {
    return (
       <NavigationContainer>
-         <Stack.Navigator
-            screenOptions={{
-               header: () => null,
-            }}
+         <Tab.Navigator
+            screenOptions={({ route }) => ({
+               tabBarIcon: ({ focused, size, color }) => {
+                  let iconName;
+                  size = focused ? 25 : 20;
+
+                  if (route.name === "Screen_A") {
+                     iconName = "closecircle";
+                  }
+
+                  if (route.name === "Screen_B") {
+                     iconName = "exclamationcircle";
+                  }
+
+                  return <AntDesign name={iconName} color="black" size={size} />;
+               },
+            })}
          >
-            <Stack.Screen
+            <Tab.Screen
+               options={{ tabBarBadge: 3 }}
                name="Screen_A"
                component={ScreenA}
-               options={{ header: () => null }}
-            ></Stack.Screen>
-            <Stack.Screen name="Screen_B" component={ScreenB}></Stack.Screen>
-         </Stack.Navigator>
+            ></Tab.Screen>
+            <Tab.Screen
+               name="Screen_B"
+               options={{ tabBarBadge: 3 }}
+               component={ScreenB}
+            ></Tab.Screen>
+         </Tab.Navigator>
       </NavigationContainer>
    );
 }
