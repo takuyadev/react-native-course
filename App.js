@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import {
    View,
    Text,
-   SectionList,
-   ScrollView,
-   RefreshControl,
-   FlatList,
+   ToastAndroid,
+   TouchableHighlight,
+   Pressable,
+   Button,
    TextInput,
+   Modal,
 } from "react-native";
 import { StyleSheet } from "react-native";
 
@@ -14,6 +15,8 @@ function App() {
    const [refreshing, setRefreshing] = useState(false);
    const [name, setName] = useState("");
    const [count, setCount] = useState(2);
+   const [submitted, setSubmitted] = useState(false);
+   const [showWarning, setShowWarning] = useState(true);
    const [list, setList] = useState([
       {
          title: "Title 1",
@@ -46,8 +49,41 @@ function App() {
       setRefreshing(false);
    };
 
+   const onPressHandler = () => {
+      if (name.length > 3) {
+         setSubmitted(!submitted);
+      } else {
+         // Alert.alert(
+         //    "WOOWOWOWWOO",
+         //    "maybe read the fucking room once in a while huh buddy dick head sugma?",
+         //    [
+         //       { text: "uh huh", onPress: () => console.warn('OK pressed!')},
+         //       { text: "NUH", onPress: () => console.warn('we are going to the based land')},
+         //  ]
+         // );
+         ToastAndroid.showWithGravity(
+            "The name must be longer than 3 characters",
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            100,
+            200
+         );
+      }
+   };
+
    return (
       <View style={styles.body}>
+         <Modal
+            onRequestClose={() => {
+               setShowWarning(false);
+            }}
+            transparent
+            visible={showWarning}
+         >
+            <View style={styles.warning_modal}>
+               <Text>HELLo</Text>
+            </View>
+         </Modal>
          <Text style={styles.text}>Please write your name: {name}</Text>
          <TextInput
             secureTextEntry
@@ -56,8 +92,29 @@ function App() {
                setName(value);
             }}
             style={styles.textInput}
-            maxLength={2}
          />
+         <TouchableHighlight
+            style={styles.button}
+            underlayColor={"#FF0000"}
+            onPress={onPressHandler}
+         >
+            <Text>{submitted ? "Clear" : "Submit"}</Text>
+         </TouchableHighlight>
+         <Button
+            activeOpacity={0.9}
+            title="Submit"
+            onPress={onPressHandler}
+            color={"#00f"}
+         ></Button>
+         <Pressable
+            hitSlop={{ top: 100, bottom: 10, right: 100, left: 10 }}
+            android_ripple={{ color: "#00f" }}
+            onPress={onPressHandler}
+            style={styles.button}
+         >
+            <Text>asdas</Text>
+         </Pressable>
+         {submitted && <Text>You are registered as {name}</Text>}
       </View>
       // <SectionList
       //    sections={list}
@@ -124,6 +181,18 @@ const styles = StyleSheet.create({
       borderColor: "red",
       padding: 10,
       textAlign: "center",
+   },
+   button: {
+      width: 150,
+      height: 50,
+      backgroundColor: "green",
+      alignItems: "center",
+      justifyContent: "center",
+   },
+   warning_modal: {
+      width: 300,
+      height: 300,
+      backgroundColor: "#FFFF00",
    },
 });
 
